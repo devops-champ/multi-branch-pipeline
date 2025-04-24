@@ -1,3 +1,12 @@
+def isPR = env.CHANGE_ID != null
+
+// Skip if this is NOT a PR
+if (!isPR) {
+    println "Skipping build for branch ${env.BRANCH_NAME} — not a PR."
+    return
+}
+
+
 pipeline {
     agent any
 
@@ -16,9 +25,9 @@ pipeline {
     stages {
 
         stage('Build') {
-            when {
-                expression { return env.CHANGE_ID != null || env.BRANCH_NAME != null }
-            }
+            // when {
+            //     expression { return env.CHANGE_ID != null || env.BRANCH_NAME != null }
+            // }
             agent {
                 docker {
                     image 'node:20-slim'
@@ -40,9 +49,9 @@ pipeline {
         }
 
         stage('Test') {
-            when {
-                expression { return env.CHANGE_ID != null || env.BRANCH_NAME != null }
-            }            
+            // when {
+            //     expression { return env.CHANGE_ID != null || env.BRANCH_NAME != null }
+            // }            
             agent {
                 docker {
                     image 'node:20-slim'
@@ -65,9 +74,9 @@ pipeline {
         }
 
         stage('E2E') {
-            when {
-                expression { return env.CHANGE_ID != null || env.BRANCH_NAME != null }
-            }            
+            // when {
+            //     expression { return env.CHANGE_ID != null || env.BRANCH_NAME != null }
+            // }            
             agent {
                 docker {
                     image 'mcr.microsoft.com/playwright:v1.39.0-jammy'
